@@ -20,7 +20,7 @@ export enum AssetPackage {
 export function getAssetUrl(path: string, pkg: AssetPackage): string {
     switch (pkg) {
         case AssetPackage.GOBO:
-            return `${process.env.PUBLIC_URL}/gobo_images/${path}`;
+            return `https://static.gobospinner.dankeenan.org/gobo_images/${path}`;
     }
     throw new AssetError(`Package "${pkg}" does not exist.`);
 }
