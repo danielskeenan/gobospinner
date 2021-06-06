@@ -1,0 +1,5 @@
+app/*.local
+app/public/bundles
+app/var/*
+app/vendor
+web

@@ -1,0 +1,35 @@
+@import "src/assets/styles/bootstrap";
+
+.mts-spinner-gobos {
+    $imageSize: 20rem;
+
+    @extend .mx-auto;
+    display: block;
+    position: relative;
+    width: $imageSize;
+    height: $imageSize;
+    margin-bottom: $imageSize / 4;
+
+    img.mts-gobo-image {
+        @keyframes mts-spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(1turn);
+            }
+        }
+
+        width: $imageSize;
+        height: $imageSize;
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: block;
+        animation-play-state: running;
+        animation-name: mts-spin;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        filter: blur(0.04rem);
+    }
+}

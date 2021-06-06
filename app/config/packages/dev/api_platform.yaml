@@ -1,0 +1,4 @@
+api_platform:
+  defaults:
+    cache_headers:
+      max_age: 0

@@ -1,0 +1,27 @@
+@import "src/assets/styles/bootstrap";
+
+.mts-goboselector {
+    .nav.nav-tabs {
+        @extend .my-2;
+    }
+
+    .mts-goboselector-controls {
+        @extend .my-1;
+
+        .form-control {
+            @extend .mx-1;
+            display: inline-block;
+            width: fit-content;
+        }
+    }
+
+    .mts-goboselector-list {
+        @extend .gap-1;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, [col-start] minmax(8rem, 1fr) [col-end]);
+
+        .mts-goboselector-gobo {
+            break-inside: avoid;
+        }
+    }
+}
