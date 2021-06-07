@@ -62,7 +62,11 @@ function App() {
                         <>
                             <Spinner stack={state.gobos}/>
                             <GoboStack gobos={state.gobos}/>
-                            <Permalink stack={state.gobos}/>
+
+                            <div className="mt-3 d-flex align-items-center">
+                                <div className="me-1">Permalink:</div>
+                                <Permalink stack={state.gobos}/>
+                            </div>
                         </>
                     )}
                 </Container>

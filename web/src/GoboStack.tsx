@@ -125,8 +125,8 @@ export default function GoboStack(props: { gobos: SpinningGobo[] }) {
                         ))}
                     </Table>
                 )}
-                <Button variant="outline-success" title="Add" onClick={() => setShowBrowser(true)}>
-                    <FontAwesomeIcon icon={faPlus}/>
+                <Button variant="outline-success" onClick={() => setShowBrowser(true)}>
+                    <FontAwesomeIcon icon={faPlus}/>&nbsp;Add
                 </Button>
             </div>
 
