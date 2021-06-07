@@ -1,6 +1,6 @@
 import React, {useEffect, useReducer} from 'react';
 import './App.scss';
-import {Container, Navbar} from 'react-bootstrap';
+import {Container, Nav, Navbar} from 'react-bootstrap';
 import Flashes, {Flash, FlashSeverity} from './common/components/Flashes';
 import AppContext from './common/Context';
 import GoboStack from './GoboStack';
@@ -8,6 +8,8 @@ import Spinner, {SpinningGobo} from './Spinner';
 import Permalink, {goboStackFromUrl} from './Permalink';
 import Loading from './common/components/Loading';
 import {AxiosError} from 'axios';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faGithub} from '@fortawesome/free-brands-svg-icons';
 
 interface AppState {
     flashes: Flash[]
@@ -45,6 +47,11 @@ function App() {
                 >
                     <Container fluid>
                         <Navbar.Brand>Gobo Spinner</Navbar.Brand>
+                        <Nav className="mb-auto">
+                            <Nav.Link href="https://github.com/danielskeenan/gobospinner">
+                                <FontAwesomeIcon icon={faGithub}/>&nbsp;Source
+                            </Nav.Link>
+                        </Nav>
                     </Container>
                 </Navbar>
 
