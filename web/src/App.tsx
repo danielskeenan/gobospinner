@@ -44,7 +44,7 @@ function App() {
                         fixed="top"
                 >
                     <Container fluid>
-                        <Navbar.Brand>Multi-Spin</Navbar.Brand>
+                        <Navbar.Brand>Gobo Spinner</Navbar.Brand>
                     </Container>
                 </Navbar>
 
