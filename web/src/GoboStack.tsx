@@ -14,7 +14,9 @@ export default function GoboStack(props: { gobos: SpinningGobo[] }) {
     const {setGobos} = useContext(AppContext) as Required<AppContextProps>;
     const {gobos} = props;
 
-    const [showBrowser, setShowBrowser] = useState(false);
+    const [browserVisible, setBrowserVisible] = useState(false);
+    const showBrowser = useCallback(() => setBrowserVisible(true), [setBrowserVisible]);
+    const hideBrowser = useCallback(() => setBrowserVisible(false), [setBrowserVisible]);
 
     const goboAddedCallback = useCallback((gobo: ApiRecord.Gobo) => {
         const spinningGobo: SpinningGobo = {
@@ -125,19 +127,22 @@ export default function GoboStack(props: { gobos: SpinningGobo[] }) {
                         ))}
                     </Table>
                 )}
-                <Button variant="outline-success" onClick={() => setShowBrowser(true)}>
+                <Button variant="outline-success" onClick={showBrowser}>
                     <FontAwesomeIcon icon={faPlus}/>&nbsp;Add
                 </Button>
             </div>
 
             {/* Gobo browser */}
-            <Modal size="lg" show={showBrowser} onHide={() => setShowBrowser(false)}>
+            <Modal size="lg" show={browserVisible} onHide={hideBrowser}>
                 <Modal.Header closeButton>
                     <Modal.Title>Gobo Browser</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Browser onSelect={goboAddedCallback} actionLabel="Add"/>
                 </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="outline-danger" onClick={hideBrowser}>Close</Button>
+                </Modal.Footer>
             </Modal>
         </>
     );
