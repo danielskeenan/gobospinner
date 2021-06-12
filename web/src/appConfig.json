@@ -1,0 +1,5 @@
+{
+  "minBlur": 0.5,
+  "maxBlur": 15,
+  "maxDuration": 100000
+}

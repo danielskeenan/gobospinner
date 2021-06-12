@@ -2,20 +2,23 @@ import React from 'react';
 import {Form} from 'react-bootstrap';
 import {SpinningGobo} from './Spinner';
 import {makeQuery} from './common/client';
+import appConfig from './appConfig.json';
 
 enum PermalinkParam {
+    BLUR = 'blur',
     GOBO = 'gobo',
     REVERSE = 'reverse',
     SPEED = 'speed',
 }
 
-export default function Permalink(props: { stack: SpinningGobo[] }) {
+export default function Permalink(props: { stack: SpinningGobo[], blur: number }) {
     const {stack} = props;
 
     const url = new URL(document.location.href);
     for (const param in PermalinkParam) {
         url.searchParams.delete(PermalinkParam[param as keyof typeof PermalinkParam]);
     }
+    url.searchParams.set(PermalinkParam.BLUR, String(props.blur));
     for (const gobo of stack) {
         url.searchParams.append(PermalinkParam.GOBO, String(gobo.gobo.id));
         url.searchParams.append(PermalinkParam.REVERSE, String(Number(gobo.reverseSpin)));
@@ -54,4 +57,17 @@ export function goboStackFromUrl(url: string = document.location.href): Promise<
             }));
     }
     return Promise.all(promises);
+}
+
+export function blurFromUrl(url: string = document.location.href): number {
+    const params = (new URL(url)).searchParams;
+    if (!params.has(PermalinkParam.BLUR)) {
+        return appConfig.minBlur;
+    }
+    const blur = Number(params.get(PermalinkParam.BLUR));
+    if (!Number.isFinite(blur) || blur < appConfig.minBlur || blur > appConfig.maxBlur) {
+        console.log('Malformed URL');
+        return appConfig.minBlur;
+    }
+    return blur;
 }

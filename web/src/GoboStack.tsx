@@ -7,8 +7,7 @@ import {faCaretDown, faCaretUp, faMinus, faPlus} from '@fortawesome/free-solid-s
 import Browser from './Browser';
 import './GoboStack.scss';
 import {SpinningGobo} from './Spinner';
-
-const maxDuration = 100000;
+import appConfig from './appConfig.json';
 
 export default function GoboStack(props: { gobos: SpinningGobo[] }) {
     const {setGobos} = useContext(AppContext) as Required<AppContextProps>;
@@ -113,7 +112,7 @@ export default function GoboStack(props: { gobos: SpinningGobo[] }) {
                                             </Col>
                                             <Col>
                                                 <Form.Range min={0}
-                                                            max={maxDuration}
+                                                            max={appConfig.maxDuration}
                                                             step={10}
                                                             value={calculateDurationFromSpeed(gobo.duration)}
                                                             onChange={e => goboSpeedChangedCallback(index, calculateDurationFromSpeed(Number(e.target.value)))}
@@ -149,5 +148,5 @@ export default function GoboStack(props: { gobos: SpinningGobo[] }) {
 }
 
 function calculateDurationFromSpeed(speed: number): number {
-    return maxDuration - speed;
+    return appConfig.maxDuration - speed;
 }

@@ -11,7 +11,7 @@ export interface SpinningGobo {
     duration: number
 }
 
-export default function Spinner(props: { stack: SpinningGobo[] }) {
+export default function Spinner(props: { stack: SpinningGobo[], blur: number }) {
     const stack = props.stack.slice();
 
     // The stack must be sorted to place the steel gobos at the top.
@@ -30,6 +30,7 @@ export default function Spinner(props: { stack: SpinningGobo[] }) {
                          opacity: gobo.gobo.adjustOpacity ? `${opacity}%` : '100%',
                          animationDuration: `${gobo.duration}ms`,
                          animationDirection: gobo.reverseSpin ? 'reverse' : 'normal',
+                         filter: `blur(${props.blur}px)`,
                      }}
                 />
             ))}

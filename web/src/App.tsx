@@ -1,16 +1,17 @@
-import React, {useEffect, useReducer} from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import './App.scss';
-import {Container, Nav, Navbar} from 'react-bootstrap';
+import {Col, Container, Form, Nav, Navbar, Row} from 'react-bootstrap';
 import Flashes, {Flash, FlashSeverity} from './common/components/Flashes';
 import AppContext from './common/Context';
 import GoboStack from './GoboStack';
 import Spinner, {SpinningGobo} from './Spinner';
-import Permalink, {goboStackFromUrl} from './Permalink';
+import Permalink, {blurFromUrl, goboStackFromUrl} from './Permalink';
 import Loading from './common/components/Loading';
 import {AxiosError} from 'axios';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faGithub} from '@fortawesome/free-brands-svg-icons';
 import appIcon from './assets/icon.svg';
+import appConfig from './appConfig.json';
 
 interface AppState {
     flashes: Flash[]
@@ -21,6 +22,7 @@ function App() {
     const [state, setState] = useReducer((state: AppState, newState: Partial<AppState>) => ({...state, ...newState}), {
         flashes: [],
     } as AppState);
+    const [goboBlur, setGoboBlur] = useState(blurFromUrl());
     const setFlashes = React.useCallback((flashes: Flash[]) => setState({flashes: flashes}), []);
     const setGobos = React.useCallback((gobos: SpinningGobo[]) => setState({gobos: gobos}), []);
     const appContext = {
@@ -64,13 +66,40 @@ function App() {
                     {state.gobos === undefined && <Loading/>}
                     {state.gobos !== undefined && (
                         <>
-                            <Spinner stack={state.gobos}/>
-                            <GoboStack gobos={state.gobos}/>
+                            <Row>
+                                <Col>
+                                    <Spinner stack={state.gobos} blur={goboBlur}/>
+                                </Col>
+                            </Row>
 
-                            <div className="mt-3 d-flex align-items-center">
-                                <div className="me-1">Permalink:</div>
-                                <Permalink stack={state.gobos}/>
-                            </div>
+                            <Row className="align-items-center">
+                                <Col xs="auto">
+                                    <Form.Label>Blur:</Form.Label>
+                                </Col>
+                                <Col>
+                                    <Form.Range min={appConfig.minBlur}
+                                                max={appConfig.maxBlur}
+                                                step={0.1}
+                                                value={goboBlur}
+                                                onChange={(e) => setGoboBlur(Number(e.target.value))}/>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <GoboStack gobos={state.gobos}/>
+                                </Col>
+                            </Row>
+
+                            <Form.Group as={Row}>
+                                <Form.Label column>Permalink:</Form.Label>
+                                <Col xs="11">
+                                    <Permalink stack={state.gobos} blur={goboBlur}/>
+                                </Col>
+                                {/*<div className="mt-3 d-flex align-items-center">*/}
+                                {/*    <div className="me-1">Permalink:</div>*/}
+                                {/*    <Permalink stack={state.gobos}/>*/}
+                                {/*</div>*/}
+                            </Form.Group>
                         </>
                     )}
                 </Container>
