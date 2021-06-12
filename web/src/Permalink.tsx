@@ -48,10 +48,18 @@ export function goboStackFromUrl(url: string = document.location.href): Promise<
     for (let index = 0; index < goboIds.length; ++index) {
         promises.push(makeQuery<ApiRecord.Gobo>(`gobos/${goboIds[index]}`)
             .then(response => {
+                let duration = Number(speeds[index]);
+                if (!Number.isFinite(duration) || duration < appConfig.minDuration || duration > appConfig.maxDuration) {
+                    duration = appConfig.defaultDuration;
+                }
+                let reverseSpin = Number(reverse[index]);
+                if (!Number.isFinite(reverseSpin)) {
+                    reverseSpin = 0;
+                }
                 const spinningGobo: SpinningGobo = {
                     gobo: response.data,
-                    duration: Number(speeds[index]),
-                    reverseSpin: Boolean(Number(reverse[index])),
+                    duration: duration,
+                    reverseSpin: Boolean(reverseSpin),
                 };
                 return spinningGobo;
             }));
@@ -62,12 +70,12 @@ export function goboStackFromUrl(url: string = document.location.href): Promise<
 export function blurFromUrl(url: string = document.location.href): number {
     const params = (new URL(url)).searchParams;
     if (!params.has(PermalinkParam.BLUR)) {
-        return appConfig.minBlur;
+        return appConfig.defaultBlur;
     }
     const blur = Number(params.get(PermalinkParam.BLUR));
     if (!Number.isFinite(blur) || blur < appConfig.minBlur || blur > appConfig.maxBlur) {
         console.log('Malformed URL');
-        return appConfig.minBlur;
+        return appConfig.defaultBlur;
     }
     return blur;
 }

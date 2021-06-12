@@ -21,7 +21,7 @@ export default function GoboStack(props: { gobos: SpinningGobo[] }) {
         const spinningGobo: SpinningGobo = {
             gobo: gobo,
             reverseSpin: false,
-            duration: 9500,
+            duration: appConfig.defaultDuration,
         };
         gobos.push(spinningGobo);
         setGobos(gobos);
@@ -111,7 +111,7 @@ export default function GoboStack(props: { gobos: SpinningGobo[] }) {
                                                 />
                                             </Col>
                                             <Col>
-                                                <Form.Range min={0}
+                                                <Form.Range min={appConfig.minDuration}
                                                             max={appConfig.maxDuration}
                                                             step={10}
                                                             value={calculateDurationFromSpeed(gobo.duration)}
