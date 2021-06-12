@@ -297,7 +297,12 @@ interface GoboListProps extends Pick<SeriesTabProps, 'onSelect' | 'actionLabel'>
     pageIndex?: number
 }
 
+const buttonSelectedClassname = 'mts-button-animate-selected';
+const buttonDeselectedClassname = 'mts-button-animate-deselected';
+
 function GoboList(props: GoboListProps) {
+    const {onSelect} = props;
+
     // Configure the display
     const columns: DataTableColumnOptions<ApiRecord.Gobo>[] = useMemo(() => [
         {
@@ -355,6 +360,24 @@ function GoboList(props: GoboListProps) {
     useEffect(() => gotoPage(0), [dataFetcher, gotoPage]);
     const fetchDataDebounced = useAsyncDebounce(() => dataFetcher && dataFetcher(pageIndex, pageSize, sortMap), 100);
     useEffect(fetchDataDebounced, [fetchDataDebounced, pageIndex, pageSize, sortBy, dataFetcher]);
+
+    // Selection handler provides user feedback that an item has been selected
+    const handleSelection = useCallback((e: React.MouseEvent<HTMLElement>, selection: ApiRecord.Gobo) => {
+        onSelect(selection);
+        const target = e.currentTarget as HTMLButtonElement;
+        target.classList.remove(buttonDeselectedClassname);
+        target.classList.add(buttonSelectedClassname);
+        const oldText = target.innerText;
+        target.innerText = 'Selected';
+        // Don't allow double selecting while the feedback is shown.
+        target.disabled = true;
+        setTimeout(() => {
+            target.classList.remove(buttonSelectedClassname);
+            target.classList.add(buttonDeselectedClassname);
+            target.innerText = oldText;
+            target.disabled = false;
+        }, 1000);
+    }, [onSelect]);
 
     if (props.loading) {
         return <Loading/>;
@@ -467,7 +490,9 @@ function GoboList(props: GoboListProps) {
                             </Card.Body>
                             <Card.Footer>
                                 <div className="d-grid">
-                                    <Button variant="secondary" onClick={() => props.onSelect(row.original)}>
+                                    <Button variant="secondary"
+                                            className={buttonDeselectedClassname}
+                                            onClick={(e) => handleSelection(e, row.original)}>
                                         {props.actionLabel}
                                     </Button>
                                 </div>

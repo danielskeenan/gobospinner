@@ -23,5 +23,9 @@
         .mts-goboselector-gobo {
             break-inside: avoid;
         }
+
+        .mts-button-animate-selected {
+            @extend .btn-outline-success;
+        }
     }
 }
