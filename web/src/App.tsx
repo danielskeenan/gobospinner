@@ -10,6 +10,7 @@ import Loading from './common/components/Loading';
 import {AxiosError} from 'axios';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faGithub} from '@fortawesome/free-brands-svg-icons';
+import appIcon from './assets/icon.svg';
 
 interface AppState {
     flashes: Flash[]
@@ -46,7 +47,10 @@ function App() {
                         fixed="top"
                 >
                     <Container fluid>
-                        <Navbar.Brand>Gobo Spinner</Navbar.Brand>
+                        <Navbar.Brand>
+                            <img src={appIcon} alt=""/>
+                            &nbsp;Gobo Spinner
+                        </Navbar.Brand>
                         <Nav className="mb-auto">
                             <Nav.Link href="https://github.com/danielskeenan/gobospinner">
                                 <FontAwesomeIcon icon={faGithub}/>&nbsp;Source

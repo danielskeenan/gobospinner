@@ -4,3 +4,11 @@
 html, body {
     @extend .h-100;
 }
+
+.navbar-brand {
+    img {
+        max-width: 100%;
+        height: $navbar-brand-height;
+        vertical-align: top;
+    }
+}
