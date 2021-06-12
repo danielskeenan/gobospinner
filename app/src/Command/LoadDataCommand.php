@@ -163,16 +163,16 @@ class LoadDataCommand extends Command
             $unusedSeries = !$manufacturers->hasKey((int)$row['series_id']);
             $unusedMaterial = !$materials->hasKey((int)$row['material_id']);
             // Apollo recoded their gobos.
-            $unusedCode = (int)$row['series_id'] === self::MANU_APOLLO && substr($row['code'], 0, 2) === 'MS';
-            if (empty($row['image']) || $unusedSeries || $unusedMaterial || $unusedCode) {
-                $progress->advance();
-                continue;
+            $unusedCode = (int)$row['series_id'] === self::MANU_APOLLO && str_starts_with($row['code'], 'MS');
+            $skip = empty($row['image']) || $unusedSeries || $unusedMaterial || $unusedCode;
+            if (!$skip) {
+                $gobo = $this->goboFromRow($row, $manufacturers, $materials);
+                $punchout = false;
+                $gobo->setImageId($this->extractImageFromRow($row, $imagesPath, $punchout))
+                    ->setAdjustOpacity(!$punchout);
+                $this->em->persist($gobo);
             }
-            $gobo = $this->goboFromRow($row, $manufacturers, $materials);
-            $punchout = false;
-            $gobo->setImageId($this->extractImageFromRow($row, $imagesPath, $punchout))->setAdjustOpacity(!$punchout);
 
-            $this->em->persist($gobo);
             $progress->advance();
             if ($progress->getProgress() % 100 === 0) {
                 // Flush every 100 rows
@@ -193,7 +193,8 @@ class LoadDataCommand extends Command
     private function goboFromRow(array $row, Map $manufacturers, Map $materials): Gobo
     {
         $gobo = new Gobo();
-        $gobo->setManufacturer($manufacturers[(int)$row['series_id']])
+        $gobo->setId($row['id'])
+            ->setManufacturer($manufacturers[(int)$row['series_id']])
             ->setMaterial($materials[(int)$row['material_id']])
             ->setName($row['name'])
             ->setCode($row['code'])
